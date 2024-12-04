@@ -32,6 +32,7 @@ pub struct StorablePersistentState {
     // opt fields because of backwards compatibility
     event_stats_24h_start: Option<EventKey>,
     captcha_config: Option<CaptchaConfig>,
+    related_origins: Option<Vec<String>>,
 }
 
 impl Storable for StorablePersistentState {
@@ -69,6 +70,7 @@ impl From<PersistentState> for StorablePersistentState {
             max_inflight_captchas: 0,
             event_stats_24h_start: s.event_stats_24h_start,
             captcha_config: Some(s.captcha_config),
+            related_origins: s.related_origins,
         }
     }
 }
@@ -84,6 +86,7 @@ impl From<StorablePersistentState> for PersistentState {
             active_authn_method_stats: s.active_authn_method_stats,
             captcha_config: s.captcha_config.unwrap_or(DEFAULT_CAPTCHA_CONFIG),
             event_stats_24h_start: s.event_stats_24h_start,
+            related_origins: s.related_origins,
         }
     }
 }
@@ -127,6 +130,7 @@ mod tests {
                 max_unsolved_captchas: 500,
                 captcha_trigger: CaptchaTrigger::Static(StaticCaptchaTrigger::CaptchaEnabled),
             }),
+            related_origins: None,
         };
 
         assert_eq!(StorablePersistentState::default(), expected_defaults);
@@ -146,6 +150,7 @@ mod tests {
                 captcha_trigger: CaptchaTrigger::Static(StaticCaptchaTrigger::CaptchaEnabled),
             },
             event_stats_24h_start: None,
+            related_origins: None,
         };
         assert_eq!(PersistentState::default(), expected_defaults);
     }
